@@ -39,10 +39,11 @@ module AST =
 
 module Forest =
   struct
-    (* Nodes of interest from the AST. The functions of type [t -> t]
-       add to their argument the subforest below the node. This enable
-       the caller of the functions below to complete the forest to
-       iterate over. *)
+    (* Nodes of interest from the AST. *)
+
+    (* The functions of type [t -> t] add to their argument the
+       subforest below the node. This enables the caller of the
+       functions below to complete the forest to iterate over. *)
 
     type tree = [
       `Expr of AST.expr      * (t -> t)
