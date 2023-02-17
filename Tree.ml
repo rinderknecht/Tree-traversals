@@ -100,8 +100,8 @@ module Forest =
 
 module Acc =
   struct
-    (* As an example, we gather the names of the function being
-    called, and the number of integer types. *)
+    (* As an example, we gather the names of the functions being
+       called, and the number of integer types. *)
 
     type t = {fun_names : string list; int_types : int}
 
