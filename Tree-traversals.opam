@@ -1,0 +1,18 @@
+opam-version : "2.0"
+name         : "Tree-traversals"
+version      : "1.0"
+synopsis     : "Tree traversals with one fold"
+description  : "The following technique enables both preorder and postorder tree traversals (among others) with one parameterised fold. Arguably, it is mostly interesting when the node that contribute to the updating of the accumulator are not many."
+maintainer   : "Christian Rinderknecht <rinderknecht@free.fr>"
+authors      : "Christian Rinderknecht <rinderknecht@free.fr>"
+homepage     : "https://github.com/rinderknecht/Tree-traversals"
+bug-reports  : "https://github.com/rinderknecht/Tree-traversals/issues"
+license      : "MIT"
+
+# If you change the dependencies, run `opam lock` in the root
+depends      : ["dune"]
+build        : [[ "dune" "build" "-p" name]]
+
+url {
+  src: "https://github.com/rinderknecht/Tree-traversals/-/archive/master/Tree-traversals.tar.gz"
+}
