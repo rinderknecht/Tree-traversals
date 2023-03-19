@@ -54,7 +54,7 @@ module Forest =
 
     type forest = t
 
-    (* Extracting the greatest sub-forest from a tree *)
+    (* Extracting the sub-forest of interest from a forest *)
 
     (* Note the use of [List.fold_right]. Beyond preserving the order
        of the sub-forests, it enables the eta-conversion of the
@@ -124,24 +124,30 @@ module Acc =
       | Arrow _ -> acc
   end
 
-(* Folding in preorder and postorder over a forest *)
+(* Updating the accumulator with a tree and pushing its children to a
+   given forest. *)
 
 let update (tree : Forest.tree) (forest : Forest.t) =
   match tree with
     `Expr (e, push_children) -> Acc.update_expr e, push_children forest
   | `Type (t, push_children) -> Acc.update_type t, push_children forest
 
+(* Preorder *)
+
 let rec preorder acc = function
   [] -> acc
 | tree :: forest ->
     let upd, forest = update tree forest
-    in preorder (upd acc) forest
+    in upd @@ preorder acc forest
+(* Postorder  *)
 
 let rec postorder acc = function
   [] -> acc
 | tree :: forest ->
-    let upd, forest = update tree forest
-    in upd @@ postorder acc forest
+    let upd, children = update tree []
+    in postorder (upd acc) (List.rev_append children forest)
+
+let postorder acc = postorder acc <@ List.rev
 
 (* Example *)
 
@@ -162,12 +168,12 @@ let tree = [
 let init   = Acc.{fun_names = []; int_types = 0}
 let forest = Forest.of_declarations tree
 
-let _ : Acc.t = preorder  init forest
-let _ : Acc.t = postorder init forest
+let pre  : Acc.t = preorder  init forest
+let post : Acc.t = postorder init forest
 
 (*
 # #use "Tree.ml";;
 [...]
-- : Acc.t = {Acc.fun_names = ["e"; "d"; "c"; "b"; "a"]; int_types = 3}
-- : Acc.t = {Acc.fun_names = ["a"; "b"; "c"; "d"; "e"]; int_types = 3}
+val pre : Acc.t = {Acc.fun_names = ["a"; "b"; "c"; "d"; "e"]; int_types = 3}
+val post : Acc.t = {Acc.fun_names = ["a"; "b"; "d"; "e"; "c"]; int_types = 3}
 *)
