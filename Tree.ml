@@ -139,6 +139,7 @@ let rec preorder acc = function
 | tree :: forest ->
     let upd, forest = update tree forest
     in upd @@ preorder acc forest
+
 (* Postorder  *)
 
 let rec postorder acc = function
